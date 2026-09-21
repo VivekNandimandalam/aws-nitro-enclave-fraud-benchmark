@@ -1,0 +1,36 @@
+# Python environments and generated Python files
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Local configuration, credentials, and SSH material
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials
+
+# Research data: obtain and retain locally; do not commit it
+creditcard.csv
+data/
+
+# Generated model and benchmark artefacts
+models/*
+!models/.gitkeep
+results/raw/*
+!results/raw/.gitkeep
+results/processed/*
+!results/processed/.gitkeep
+results/figures/*
+!results/figures/.gitkeep
+
+# Local editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
