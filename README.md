@@ -19,7 +19,7 @@ The following local artefacts already exist but are deliberately ignored by Git:
 - `models/test_payload.csv` — preprocessed test records for future benchmark input.
 - `models/lr_fraud.joblib` — exploratory logistic-regression artefact.
 
-`train_models.py` is the existing preliminary training script. It will be corrected, version-pinned, and documented before the model is frozen for the experiment. Do not treat the current artefacts as the final experimental model.
+`train_models.py` is the original preliminary training script and is retained only for historical reference. Do not run it. The supported, leakage-free training workflow is `model/train.py`.
 
 ## Repository layout
 
@@ -53,6 +53,24 @@ pip install -r requirements.txt
 - Use the same frozen model artefact and test inputs in the baseline and enclave conditions.
 - Do not fabricate benchmark data or conclusions.
 
+## Train and freeze the benchmark model
+
+With `creditcard.csv` in the repository root, run:
+
+```powershell
+python model/train.py
+```
+
+The script performs a stratified 80/20 split before fitting `RobustScaler`, trains the frozen XGBoost model, and writes these ignored artefacts to `models/`:
+
+- `xgb_fraud.json` — the model for both benchmark conditions.
+- `preprocessor.joblib` — fitted preprocessing specification.
+- `benchmark_payload.csv` and `benchmark_labels.csv` — fixed, aligned test inputs and labels.
+- `validation_metrics.json` and `model_metadata.json` — validation and reproducibility metadata.
+- `SHA256SUMS.txt` — SHA-256 integrity hashes.
+
+Use the exact frozen artefacts in both the baseline and enclave environments. `models/test_payload.csv` is a legacy preliminary payload and must not be used.
+
 ## Next milestone
 
-Correct and document the deterministic training pipeline, then freeze a single model artefact and its metadata before implementing either inference service.
+Build and test a local native inference service that consumes `benchmark_payload.csv`. Do not provision AWS infrastructure until that service is functionally verified.
